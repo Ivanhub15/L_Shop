@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "T-Shirt",
+    "description": "Comfortable cotton t-shirt",
+    "price": 25,
+    "category": "clothes",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "Gaming Mouse",
+    "description": "RGB gaming mouse",
+    "price": 60,
+    "category": "electronics",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Keyboard",
+    "description": "Mechanical keyboard",
+    "price": 120,
+    "category": "electronics",
+    "available": false
+  }
+]
