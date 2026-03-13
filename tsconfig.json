@@ -8,5 +8,12 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
-  }
+  },
+
+  "include": ["src"],
+
+  "exclude": [
+    "node_modules",
+    "frontend"
+  ]
 }
