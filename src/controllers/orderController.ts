@@ -14,9 +14,19 @@ const writeUsers = async (users: User[]): Promise<void> => {
   await fs.writeFile(USERS_PATH, JSON.stringify(users, null, 2));
 };
 
-export const createOrder = async (req: Request, res: Response) => {
+interface CreateOrderRequest {
+  address: string;
+  phone: string;
+  email: string;
+}
 
-  const userId = Number(req.cookies.sessionId);
+export const createOrder = async (req: Request<{}, {}, CreateOrderRequest>, res: Response): Promise<void> => {
+  const sessionId = req.cookies.sessionId;
+
+  if (!sessionId) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
 
   const { address, phone, email } = req.body;
 
@@ -28,7 +38,7 @@ export const createOrder = async (req: Request, res: Response) => {
   }
 
   const users = await readUsers();
-  const user = users.find(u => u.id === userId);
+  const user = users.find(u => u.id === Number(sessionId));
 
   if (!user) {
     res.status(404).json({
@@ -49,10 +59,11 @@ export const createOrder = async (req: Request, res: Response) => {
     address,
     phone,
     email,
-    items: user.cart
+    items: user.cart,
+    createdAt: new Date().toISOString()
   };
 
-  // очищаем корзину
+  // Clear cart
   user.cart = [];
 
   await writeUsers(users);

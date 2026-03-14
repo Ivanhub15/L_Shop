@@ -1,4 +1,9 @@
 export interface CartItem {
-  productId: number;
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  available: boolean;
   quantity: number;
 }

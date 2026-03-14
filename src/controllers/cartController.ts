@@ -2,12 +2,18 @@ import { Request, Response } from 'express';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { User } from '../models/User';
-import { CartItem } from '../models/CartItem';
+import { Product } from '../models/Product';
 
 const USERS_PATH = path.join(__dirname, '../data/users.json');
+const PRODUCTS_PATH = path.join(__dirname, '../data/products.json');
 
 const readUsers = async (): Promise<User[]> => {
   const data = await fs.readFile(USERS_PATH, 'utf-8');
+  return JSON.parse(data);
+};
+
+const readProducts = async (): Promise<Product[]> => {
+  const data = await fs.readFile(PRODUCTS_PATH, 'utf-8');
   return JSON.parse(data);
 };
 
@@ -15,96 +21,139 @@ const writeUsers = async (users: User[]): Promise<void> => {
   await fs.writeFile(USERS_PATH, JSON.stringify(users, null, 2));
 };
 
-export const getCart = async (req: Request, res: Response) => {
+interface AddToCartRequest {
+  productId: number;
+  quantity: number;
+}
 
-  const userId = Number(req.cookies.sessionId);
+interface RemoveFromCartRequest {
+  productId: number;
+}
+
+interface UpdateCartItemRequest {
+  productId: number;
+  quantity: number;
+}
+
+export const getCart = async (req: Request, res: Response): Promise<void> => {
+  const sessionId = req.cookies.sessionId;
+
+  if (!sessionId) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
 
   const users = await readUsers();
-  const user = users.find(u => u.id === userId);
+  const user = users.find(u => u.id === Number(sessionId));
 
   if (!user) {
-    res.status(404).json({ message: 'User not found' });
+    res.status(401).json({ message: 'User not found' });
     return;
   }
 
   res.json(user.cart);
 };
 
-export const addToCart = async (req: Request, res: Response) => {
+export const addToCart = async (req: Request<{}, {}, AddToCartRequest>, res: Response): Promise<void> => {
+  const sessionId = req.cookies.sessionId;
 
-  const userId = Number(req.cookies.sessionId);
-  const { productId, quantity } = req.body as CartItem;
-
-  const users = await readUsers();
-  const user = users.find(u => u.id === userId);
-
-  if (!user) {
-    res.status(404).json({ message: 'User not found' });
+  if (!sessionId) {
+    res.status(401).json({ message: 'Not authenticated' });
     return;
   }
 
-  const existingItem = user.cart.find(
-    item => item.productId === productId
-  );
+  const { productId, quantity } = req.body;
+
+  if (!quantity || quantity < 1) {
+    res.status(400).json({ message: 'Invalid quantity' });
+    return;
+  }
+
+  const users = await readUsers();
+  const products = await readProducts();
+
+  const user = users.find(u => u.id === Number(sessionId));
+  const product = products.find(p => p.id === productId);
+
+  if (!user || !product) {
+    res.status(400).json({ message: 'Invalid request' });
+    return;
+  }
+
+  const existingItem = user.cart.find(item => item.id === productId);
 
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
-    user.cart.push({ productId, quantity });
+    user.cart.push({
+      ...product,
+      quantity
+    });
   }
 
   await writeUsers(users);
 
-  res.json({ message: 'Item added to cart' });
+  res.json(user.cart);
 };
 
-export const updateCartItem = async (req: Request, res: Response) => {
+export const removeFromCart = async (req: Request<{}, {}, RemoveFromCartRequest>, res: Response): Promise<void> => {
+  const sessionId = req.cookies.sessionId;
 
-  const userId = Number(req.cookies.sessionId);
-  const { productId, quantity } = req.body as CartItem;
+  if (!sessionId) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  const { productId } = req.body;
 
   const users = await readUsers();
-  const user = users.find(u => u.id === userId);
+  const user = users.find(u => u.id === Number(sessionId));
 
   if (!user) {
-    res.status(404).json({ message: 'User not found' });
+    res.status(401).json({ message: 'User not found' });
     return;
   }
 
-  const item = user.cart.find(
-    i => i.productId === productId
-  );
-
-  if (!item) {
-    res.status(404).json({ message: 'Item not found in cart' });
-    return;
-  }
-
-  item.quantity = quantity;
+  user.cart = user.cart.filter(item => item.id !== productId);
 
   await writeUsers(users);
 
-  res.json({ message: 'Cart updated' });
+  res.json(user.cart);
 };
 
-export const removeCartItem = async (req: Request, res: Response) => {
+export const updateCartItem = async (req: Request<{}, {}, UpdateCartItemRequest>, res: Response): Promise<void> => {
+  const sessionId = req.cookies.sessionId;
 
-  const userId = Number(req.cookies.sessionId);
-  const { productId } = req.body as { productId: number };
-
-  const users = await readUsers();
-  const user = users.find(u => u.id === userId);
-
-  if (!user) {
-    res.status(404).json({ message: 'User not found' });
+  if (!sessionId) {
+    res.status(401).json({ message: 'Not authenticated' });
     return;
   }
 
-  user.cart = user.cart.filter(
-    item => item.productId !== productId
-  );
+  const { productId, quantity } = req.body;
+
+  if (!quantity || quantity < 1) {
+    res.status(400).json({ message: 'Invalid quantity' });
+    return;
+  }
+
+  const users = await readUsers();
+  const user = users.find(u => u.id === Number(sessionId));
+
+  if (!user) {
+    res.status(401).json({ message: 'User not found' });
+    return;
+  }
+
+  const cartItem = user.cart.find(item => item.id === productId);
+
+  if (!cartItem) {
+    res.status(404).json({ message: 'Item not in cart' });
+    return;
+  }
+
+  cartItem.quantity = quantity;
 
   await writeUsers(users);
 
-  res.json({ message: 'Item removed from cart' });
+  res.json(user.cart);
 };

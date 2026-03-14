@@ -1,31 +1,67 @@
-import { getProducts } from '../api/products.js'
+import {getProducts} from '../api/products.js'
+import {productCard} from '../components/productCard.js'
 
-export const renderHome = async () => {
+export const renderHome = async ()=>{
 
-  const container = document.getElementById('products')
+ const container=document.getElementById('products')
 
-  container.innerHTML = ''
+ let products=await getProducts()
 
-  const products = await getProducts()
+ const search=document.getElementById('search')
 
-  products.forEach(product => {
+ search.addEventListener('input',()=>{
 
-    const div = document.createElement('div')
+  const text=search.value.toLowerCase()
 
-    div.innerHTML = `
-      <h3 data-title="${product.name}">
-        ${product.name}
-      </h3>
+  const filtered=products.filter(p=>
+   p.name.toLowerCase().includes(text)
+  )
 
-      <p data-price="${product.price}">
-        $${product.price}
-      </p>
+  render(filtered)
 
-      <button>Add to cart</button>
-    `
+ })
 
-    container.append(div)
 
+ const sort=document.getElementById('sort')
+
+ sort.addEventListener('change',()=>{
+
+  if(sort.value==="price_asc"){
+   products.sort((a,b)=>a.price-b.price)
+  }
+
+  if(sort.value==="price_desc"){
+   products.sort((a,b)=>b.price-a.price)
+  }
+
+  render(products)
+
+ })
+
+
+ const category=document.getElementById('category')
+
+ category.addEventListener('change',()=>{
+
+  const filtered=products.filter(p=>
+   category.value==='' || p.category===category.value
+  )
+
+  render(filtered)
+
+ })
+
+
+ const render=(items)=>{
+
+  container.innerHTML=''
+
+  items.forEach(p=>{
+   container.appendChild(productCard(p))
   })
+
+ }
+
+ render(products)
 
 }
