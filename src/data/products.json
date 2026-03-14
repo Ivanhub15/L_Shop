@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "T-Shirt",
+    "description": "Comfortable cotton t-shirt",
+    "price": 25,
+    "category": "clothes",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "Gaming Mouse",
+    "description": "RGB gaming mouse with 6 buttons",
+    "price": 60,
+    "category": "electronics",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Mechanical Keyboard",
+    "description": "High-quality mechanical keyboard with cherry mx switches",
+    "price": 120,
+    "category": "electronics",
+    "available": false
+  },
+  {
+    "id": 4,
+    "name": "Jeans",
+    "description": "Classic blue denim jeans",
+    "price": 50,
+    "category": "clothes",
+    "available": true
+  },
+  {
+    "id": 5,
+    "name": "Wireless Headphones",
+    "description": "Noise-cancelling wireless headphones with 30hr battery",
+    "price": 150,
+    "category": "electronics",
+    "available": true
+  },
+  {
+    "id": 6,
+    "name": "Sneakers",
+    "description": "Comfortable running sneakers",
+    "price": 85,
+    "category": "clothes",
+    "available": true
+  },
+  {
+    "id": 7,
+    "name": "Monitor 4K",
+    "description": "27-inch 4K UHD Monitor",
+    "price": 350,
+    "category": "electronics",
+    "available": true
+  },
+  {
+    "id": 8,
+    "name": "Hoodie",
+    "description": "Warm and cozy hoodie",
+    "price": 45,
+    "category": "clothes",
+    "available": true
+  }
+]

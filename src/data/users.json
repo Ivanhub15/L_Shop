@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1773515689253,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "login": "johndoe",
+    "phone": "555-1234",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773516099713,
+    "name": "Test User",
+    "email": "test@example.com",
+    "login": "testuser1773516099447",
+    "phone": "555-1234",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773516572407,
+    "name": "Ivan",
+    "email": "9anvan@gmail.com",
+    "login": "123",
+    "phone": "80291014517",
+    "password": "123",
+    "cart": [
+      {
+        "id": 2,
+        "name": "Gaming Mouse",
+        "description": "RGB gaming mouse with 6 buttons",
+        "price": 60,
+        "category": "electronics",
+        "available": true,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": 1773516900855,
+    "name": "Test User",
+    "email": "test_1773516900590@test.com",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773516971081,
+    "name": "Test User",
+    "email": "test_1773516970814@test.com",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773516986671,
+    "name": "Test User",
+    "email": "test_1773516986400@test.com",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773517028128,
+    "name": "Test User",
+    "email": "test_1773517027856@test.com",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773517136206,
+    "name": "UI Test User",
+    "email": "test_1773517135941@test.com",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773517316393,
+    "name": "UI Test User",
+    "email": "test_1773517316130@test.com",
+    "password": "password123",
+    "cart": []
+  },
+  {
+    "id": 1773517828079,
+    "name": "123",
+    "email": "9anvan@gmail.com",
+    "login": "123",
+    "phone": "123",
+    "password": "123",
+    "cart": []
+  }
+]
