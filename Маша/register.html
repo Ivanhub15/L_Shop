@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+</head>
+
+<body>
+
+<h1 data-registration="true">Registration</h1>
+
+<form id="registerForm">
+
+<input placeholder="Name" name="name" required>
+<input placeholder="Email" name="email" required>
+<input placeholder="Login" name="login" required>
+<input placeholder="Phone" name="phone" required>
+<input type="password" placeholder="Password" name="password" required>
+
+<button type="submit">Register</button>
+
+</form>
+
+<script type="module">
+
+import { initRegister } from './pages/register.js'
+
+initRegister()
+
+</script>
+
+</body>
+</html>

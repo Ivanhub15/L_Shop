@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Delivery</title>
+</head>
+
+<body>
+
+<h1 data-delivery="true">Delivery</h1>
+
+<form id="deliveryForm">
+
+<input placeholder="Address" name="address">
+<input placeholder="City" name="city">
+
+<button type="submit">Order</button>
+
+</form>
+
+<script type="module">
+
+import { initDelivery } from './pages/delivery.js'
+
+initDelivery()
+
+</script>
+
+</body>
+</html>
